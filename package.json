@@ -4,7 +4,8 @@
   "version": "0.1.0",
   "scripts": {
     "local": "env-cmd --no-override .env serverless offline -t --allowCache",
-    "local:redis:fake": "env-cmd --no-override .env node ./.mocks/add_redis_fields.js"
+    "populate:redis": "env-cmd --no-override .env node ./.mocks/populate_redis.js",
+    "populate:dynamodb": "env-cmd --no-override .env node ./.mocks/populate_dynamodb.js"
   },
   "dependencies": {
     "axios": "^0.20.0",
@@ -14,7 +15,6 @@
     "@types/aws-lambda": "^8.10.61",
     "env-cmd": "^8.0.2",
     "serverless": "^1.78.1",
-    "serverless-dynamodb-local": "^0.2.39",
     "serverless-offline": "^6.7.0",
     "serverless-offline-scheduler": "^0.4.2",
     "serverless-plugin-typescript": "^1.1.9",

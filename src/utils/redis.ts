@@ -5,8 +5,8 @@ class RedisClient {
   constructor(URL: string) {
     this.connection = new Redis(URL);
   }
-  public incr(key: string) {
-    console.log(TAG, "increment", key);
+  public async incr(key: string) {
+    return await this.connection.incr(key);
   }
   public async add(key: string, value: string, member?: string) {
     await this.connection.set(key, value);
@@ -15,6 +15,9 @@ class RedisClient {
   public async get(key: string) {
     const value: string = await this.connection.get(key.trim());
     return JSON.parse(value);
+  }
+  public async remove(key: string) {
+    return await this.connection.del(key);
   }
   public async getIndexed(key: string) {
     const results = [];

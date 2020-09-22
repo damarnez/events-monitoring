@@ -9,3 +9,10 @@ export interface Block {
   transactionHash: string;
   transactionIndex: string;
 }
+
+export interface Match {
+  address: string;
+  blockHash: string;
+  blockNumber: string;
+  watcher: string[];
+}

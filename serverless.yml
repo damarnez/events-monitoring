@@ -5,7 +5,14 @@ service: events-monitoring
 provider:
   name: aws
   runtime: nodejs12.x
-
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+      Resource: "*"
 custom:
   url_infura: ${env:URL_INFURA}
   url_redis: ${env:URL_REDIS}
@@ -24,7 +31,7 @@ functions:
     handler: src/WatchLogsFromEthereum/handler.watch
     package:
       include:
-        - src/WatchLogsFromEthereum/LogsWatcher.ts
+        - src/WatchLogsFromEthereum/logswatcher.ts
     events:
       - schedule:
           rate: rate(1 minute)
@@ -45,6 +52,43 @@ functions:
       - DEV: ${self:custom.dev}
 plugins:
   - serverless-plugin-typescript
-  - serverless-dynamodb-local
   - serverless-offline-scheduler
   - serverless-offline
+resources:
+  Resources:
+    WatchersDynamoDbTable:
+      Type: "AWS::DynamoDB::Table"
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: "id"
+            AttributeType: "S"
+          - AttributeName: "email"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "id"
+            KeyType: "HASH"
+          - AttributeName: "email"
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: "NEW_IMAGE"
+        TableName: "Watchers"
+    HistoricDynamoDbTable:
+      Type: "AWS::DynamoDB::Table"
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: "id"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "id"
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: "KEYS_ONLY"
+        TableName: "Historic"
