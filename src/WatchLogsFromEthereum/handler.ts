@@ -1,19 +1,24 @@
-import { Handler } from "aws-lambda";
+import { Lambda } from "aws-sdk";
+import { Block } from "../types";
+import LogsWatcher from "./LogsWatcher";
 
-export const hello: Handler = (event: any) => {
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: "Go Serverless v1.0! Your function executed successfully!",
-        input: event,
-      },
-      null,
-      2
-    ),
-  };
+const EVENT_NAME = "events-monitoring-dev-filterevents";
+const URLCLIENT = process.env.URL_INFURA || "";
 
-  return new Promise((resolve) => {
-    resolve(response);
+export const watch = async () => {
+  const watcher = new LogsWatcher(URLCLIENT);
+  const lambda = new Lambda();
+
+  watcher.pollingLogs(15, (logs: Block[]) => {
+    if (logs && logs.length > 0) {
+      lambda
+        .invoke({
+          InvocationType: "Event",
+          FunctionName: EVENT_NAME,
+          LogType: "None",
+          Payload: JSON.stringify(logs),
+        })
+        .promise();
+    }
   });
 };

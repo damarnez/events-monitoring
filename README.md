@@ -56,3 +56,8 @@ curl https://xxxxxxxxx.execute-api.us-east-1.amazonaws.com/dev/
 # AWS_SECRET_ACCESS_KEY=<your secret access key>
 
 ```
+
+// https://www.serverless.com/dynamodb
+// https://github.com/dherault/serverless-offline
+
+// https://gist.github.com/codecitizen/47073231d781979baec47148e40ab38b

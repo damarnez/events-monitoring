@@ -7,12 +7,27 @@ provider:
   runtime: nodejs12.x
 
 functions:
-  hello:
-    handler: handler.hello
+  watchlogsfromethereum:
+    handler: src/WatchLogsFromEthereum/handler.watch
     events:
-      - http:
-          path: /
-          method: get
+      - schedule: cron(1 * ? * W *)
+    environment:
+      - URL_INFURA: ${env:URL_INFURA}
+  filterevents:
+    handler: src/FilterEvents/handler.filter
+    environment:
+      - URL_REDIS: ${env:URL_REDIS}
+  updatecountevent:
+    handler: src/UpdateCountEvent/handler.update
+    environment:
+      - URL_REDIS: ${env:URL_REDIS}
+  checkconditions:
+    handler: src/CheckConditions/handler.check
+    environment:
+      - URL_REDIS: ${env:URL_REDIS}
+      - URL_DYNAMODB: ${env:URL_DYNAMODB}
 
-plugins:
-  - serverless-plugin-typescript
+  plugins:
+    - serverless-plugin-typescript
+    - serverless-dynamodb-local
+    - serverless-offline

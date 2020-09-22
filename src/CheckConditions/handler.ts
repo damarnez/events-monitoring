@@ -1,19 +1,9 @@
-import { Handler } from "aws-lambda";
+import Redis from "../utils/redis";
+const EVENT_NAME = "events-monitoring-dev-checkconditions";
 
-export const hello: Handler = (event: any) => {
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: "Go Serverless v1.0! Your function executed successfully!",
-        input: event,
-      },
-      null,
-      2
-    ),
-  };
-
-  return new Promise((resolve) => {
-    resolve(response);
-  });
+const URL = process.env.REDIS_URL || "";
+const redis = new Redis(URL);
+export const check = (events: string[]) => {
+  const watcher = redis.getAll("watcher:*");
+  console.log("Conditions:", watcher, " counters to check ", events);
 };
