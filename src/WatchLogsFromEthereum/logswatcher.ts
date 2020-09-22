@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Block } from "../types";
+import { Block } from "../utils/types";
 
 class LogsWatcher {
   private URL: string;

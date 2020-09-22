@@ -24,7 +24,6 @@ package:
   include:
     - node_modules
     - src/utils
-    - src/types
 
 functions:
   watchlogsfromethereum:
@@ -69,10 +68,10 @@ resources:
           - AttributeName: "id"
             KeyType: "HASH"
           - AttributeName: "email"
-            KeyType: "HASH"
+            KeyType: "RANGE"
         ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
         StreamSpecification:
           StreamViewType: "NEW_IMAGE"
         TableName: "Watchers"
@@ -87,8 +86,8 @@ resources:
           - AttributeName: "id"
             KeyType: "HASH"
         ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
         StreamSpecification:
           StreamViewType: "KEYS_ONLY"
         TableName: "Historic"

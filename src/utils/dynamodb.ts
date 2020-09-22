@@ -1,17 +1,25 @@
 import { DynamoDB } from "aws-sdk";
 
+export enum Tables {
+  Historic = "Historic",
+  Watchers = "Watchers",
+}
 class DynamoDBClient {
   private connection: any;
   constructor() {
     this.connection = process.env.IS_OFFLINE
       ? new DynamoDB.DocumentClient({
           region: "localhost",
-          endpoint: "http://localhost:8000",
+          endpoint: process.env.URL_DYNAMODB,
         })
       : new DynamoDB.DocumentClient();
   }
-  public add(key, data) {
-    console.log(key, data);
+  public async add(table, data) {
+    var params = {
+      TableName: table,
+      Item: data,
+    };
+    return await this.connection.put(params).promise();
   }
 }
 

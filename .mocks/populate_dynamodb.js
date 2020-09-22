@@ -1,9 +1,9 @@
-const AWS = require('aws');
+const AWS = require('aws-sdk');
 
 AWS.config.update({
   region: "us-west-2",
   // The endpoint should point to the local or remote computer where DynamoDB (downloadable) is running.
-  endpoint: 'http://localhost:8000',
+  endpoint: process.env.URL_DYNAMODB,
   /*
     accessKeyId and secretAccessKey defaults can be used while using the downloadable version of DynamoDB. 
     For security reasons, do not store AWS Credentials in your files. Use Amazon Cognito instead.
@@ -21,11 +21,12 @@ var watchersTable = {
   TableName: "Watchers",
   KeySchema: [
     { AttributeName: "id", KeyType: "HASH" },
-    { AttributeName: "email", KeyType: "HASH" },
+    { AttributeName: "email", KeyType: "RANGE" }
+
   ],
   AttributeDefinitions: [
-    { AttributeName: "id", AttributeType: "s" },
-    { AttributeName: "email", AttributeType: "S" }
+    { AttributeName: "id", AttributeType: "S" },
+    { AttributeName: "email", AttributeType: "S" },
   ],
   ProvisionedThroughput: {
     ReadCapacityUnits: 1,
@@ -39,7 +40,7 @@ var historicTable = {
     { AttributeName: "id", KeyType: "HASH" },
   ],
   AttributeDefinitions: [
-    { AttributeName: "id", AttributeType: "s" },
+    { AttributeName: "id", AttributeType: "S" },
   ],
   ProvisionedThroughput: {
     ReadCapacityUnits: 1,
@@ -53,7 +54,7 @@ var historicTable = {
 function createTable(params) {
 
   dynamodb.createTable(params, function (err, data) {
-    if (err) console.error(error);
+    if (err) console.error(err);
     else console.log(`Created Table : ${params.TableName}`)
   });
 }

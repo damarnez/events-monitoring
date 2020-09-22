@@ -1,6 +1,6 @@
 import RedisClient from "../utils/redis";
 import Lambda from "../utils/lambda";
-import { Block, Match } from "../types";
+import { Block, Match } from "../utils/types";
 const EVENT_NAME = "events-monitoring-dev-checkconditions";
 
 const URL = process.env.URL_REDIS || "";

@@ -1,6 +1,6 @@
-import { Block } from "../types";
-import LogsWatcher from "./logswatcher";
+import { Block } from "../utils/types";
 import Lambda from "../utils/lambda";
+import LogsWatcher from "./logswatcher";
 const EVENT_NAME = "events-monitoring-dev-filterevents";
 const URLCLIENT = process.env.URL_INFURA || "";
 
