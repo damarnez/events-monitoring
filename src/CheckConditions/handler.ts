@@ -1,6 +1,7 @@
 import RedisClient from "../utils/redis";
 import DynamoDBClient, { Tables } from "../utils/dynamodb";
 import { Match } from "../utils/types";
+
 const URLREDIS = process.env.URL_REDIS || "";
 const redis = new RedisClient(URLREDIS);
 const dynamoDB = new DynamoDBClient();
@@ -16,17 +17,24 @@ export const check = async (maches: Match[]) => {
     const counter = await redis.get(key);
     if (parseInt(watcher[3]) === counter) {
       const now = Date.now();
+      try {
+        await dynamoDB.add(Tables.Historic, {
+          blockHash,
+          blockNumber,
+          address,
+          timestamp: now,
+          user: watcher[2],
+          id: `${address}:${now}`,
+        });
 
-      await dynamoDB.add(Tables.Historic, {
-        blockHash,
-        blockNumber,
-        address,
-        timestamp: now,
-        user: watcher[2],
-        id: `${address}:${now}`,
-      });
-
-      await redis.remove(key);
+        await redis.remove(key);
+      } catch (error) {
+        console.error(
+          "[CHECKCONDITIONS]",
+          "Error on remove the counter ",
+          error
+        );
+      }
     } else console.log("CONDITION UNSUCCESS");
   }
   return;
