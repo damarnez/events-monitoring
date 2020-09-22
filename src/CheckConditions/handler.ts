@@ -1,9 +1,11 @@
-import Redis from "../utils/redis";
-const EVENT_NAME = "events-monitoring-dev-checkconditions";
+import RedisClient from "../utils/redis";
 
-const URL = process.env.REDIS_URL || "";
-const redis = new Redis(URL);
-export const check = (events: string[]) => {
-  const watcher = redis.getAll("watcher:*");
-  console.log("Conditions:", watcher, " counters to check ", events);
+const URLREDIS = process.env.REDIS_URL || "";
+const redis = new RedisClient(URLREDIS);
+export const check = async (watchers: string[]) => {
+  // GET COUNTER RESULT
+  // MATCH WITH THE CONDITION
+  //// IF OK THEN UPDATE DYNAMODB
+  //// REMOVE THE COUNTER
+  // IF NOT DO NOTHING
 };

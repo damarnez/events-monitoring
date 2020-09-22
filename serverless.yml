@@ -6,28 +6,45 @@ provider:
   name: aws
   runtime: nodejs12.x
 
+custom:
+  url_infura: ${env:URL_INFURA}
+  url_redis: ${env:URL_REDIS}
+  url_dynamodb: ${env:URL_DYNAMODB}
+  dev: ${env:DEV}
+
+package:
+  # individually: true
+  include:
+    - node_modules
+    - src/utils
+    - src/types
+
 functions:
   watchlogsfromethereum:
     handler: src/WatchLogsFromEthereum/handler.watch
+    package:
+      include:
+        - src/WatchLogsFromEthereum/LogsWatcher.ts
     events:
-      - schedule: cron(1 * ? * W *)
+      - schedule:
+          rate: rate(1 minute)
+          enabled: true
     environment:
-      - URL_INFURA: ${env:URL_INFURA}
+      - URL_INFURA: ${self:custom.url_infura}
+      - DEV: ${self:custom.dev}
   filterevents:
     handler: src/FilterEvents/handler.filter
     environment:
-      - URL_REDIS: ${env:URL_REDIS}
-  updatecountevent:
-    handler: src/UpdateCountEvent/handler.update
-    environment:
-      - URL_REDIS: ${env:URL_REDIS}
+      - URL_REDIS: ${self:custom.url_redis}
+      - DEV: ${self:custom.dev}
   checkconditions:
     handler: src/CheckConditions/handler.check
     environment:
-      - URL_REDIS: ${env:URL_REDIS}
-      - URL_DYNAMODB: ${env:URL_DYNAMODB}
-
-  plugins:
-    - serverless-plugin-typescript
-    - serverless-dynamodb-local
-    - serverless-offline
+      - URL_REDIS: ${self:custom.url_redis}
+      - URL_DYNAMODB: ${self:custom.url_dynamodb}
+      - DEV: ${self:custom.dev}
+plugins:
+  - serverless-plugin-typescript
+  - serverless-dynamodb-local
+  - serverless-offline-scheduler
+  - serverless-offline

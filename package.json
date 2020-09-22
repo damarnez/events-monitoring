@@ -2,16 +2,21 @@
   "name": "aws-node-rest-api-typescript",
   "description": "",
   "version": "0.1.0",
+  "scripts": {
+    "local": "env-cmd --no-override .env serverless offline -t --allowCache",
+    "local:redis:fake": "env-cmd --no-override .env node ./.mocks/add_redis_fields.js"
+  },
   "dependencies": {
     "axios": "^0.20.0",
-    "bluebird": "^3.7.2",
-    "ethereumjs-blockstream": "^7.0.0",
-    "redis": "^3.0.2"
+    "ioredis": "^4.17.3"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.61",
+    "env-cmd": "^8.0.2",
     "serverless": "^1.78.1",
-    "serverless-offline": "^6.5.0",
+    "serverless-dynamodb-local": "^0.2.39",
+    "serverless-offline": "^6.7.0",
+    "serverless-offline-scheduler": "^0.4.2",
     "serverless-plugin-typescript": "^1.1.9",
     "typescript": "^3.9.7"
   }

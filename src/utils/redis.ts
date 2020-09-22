@@ -1,23 +1,30 @@
-import redis from "redis";
-import bluebird from "bluebird";
-bluebird.promisifyAll(redis.RedisClient.prototype);
-
-class Redis {
+import Redis from "ioredis";
+const TAG = "[REDIS]";
+class RedisClient {
   private connection: any;
   constructor(URL: string) {
-    //this.connection = redis.createClient(URL);
+    this.connection = new Redis(URL);
   }
   public incr(key: string) {
-    console.log("increment by one ", key);
+    console.log(TAG, "increment", key);
   }
-  public set(key: string, value: string) {
-    console.log("set data", key, value);
+  public async add(key: string, value: string, member?: string) {
+    await this.connection.set(key, value);
+    if (member) await this.connection.sadd(member, key);
   }
-
-  public getAll(key: string) {
-    console.log("get data");
-    return [];
+  public async get(key: string) {
+    const value: string = await this.connection.get(key.trim());
+    return JSON.parse(value);
+  }
+  public async getIndexed(key: string) {
+    const results = [];
+    const members = await this.connection.smembers(key);
+    for (let i = 0; i < members.length; i++) {
+      const value: string = await this.connection.get(members[i].trim());
+      if (value && value.length > 0) results.push(JSON.parse(value));
+    }
+    return results;
   }
 }
 
-export default Redis;
+export default RedisClient;
