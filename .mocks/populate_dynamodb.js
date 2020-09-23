@@ -1,15 +1,10 @@
 const AWS = require('aws-sdk');
 
 AWS.config.update({
-  region: "us-west-2",
+  region: "localhost",
   // The endpoint should point to the local or remote computer where DynamoDB (downloadable) is running.
   endpoint: process.env.URL_DYNAMODB,
-  /*
-    accessKeyId and secretAccessKey defaults can be used while using the downloadable version of DynamoDB. 
-    For security reasons, do not store AWS Credentials in your files. Use Amazon Cognito instead.
-  */
-  accessKeyId: "fakeMyKeyId",
-  secretAccessKey: "fakeSecretAccessKey"
+
 });
 
 
@@ -18,7 +13,7 @@ var global = new AWS.DynamoDB();
 var dynamodb = new AWS.DynamoDB.DocumentClient();
 
 var watchersTable = {
-  TableName: "Watchers",
+  TableName: "Watcher",
   KeySchema: [
     { AttributeName: "email", KeyType: "HASH" },
     { AttributeName: "id", KeyType: "RANGE" }
@@ -50,14 +45,20 @@ var historicTable = {
 
 
 
-// function createTable(params) {
+function createTable(params) {
 
-//   global.createTable(params, function (err, data) {
-//     if (err) console.error(err);
-//     else console.log(`Created Table : ${params.TableName}`)
-//   });
-// }
-
+  global.createTable(params, function (err, data) {
+    if (err) console.error(err);
+    else console.log(`Created Table : ${params.TableName}`)
+  });
+}
+async function getListTables() {
+  const a = await global.listTables((error, data) => {
+    console.log('ERRO:', error);
+    console.log('DATA:', data);
+  });
+  // console.log(a);
+}
 // async function add(table, data) {
 //   var params = {
 //     TableName: table,
@@ -122,7 +123,8 @@ var historicTable = {
 //   console.log("GET :", getfn)
 
 // }
-console.log('CREATE TABLES')
+console.log('CREATE TABLES');
+getListTables();
 createTable(watchersTable);
 createTable(historicTable);
 

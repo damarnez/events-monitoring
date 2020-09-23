@@ -3,7 +3,7 @@
   "description": "",
   "version": "0.1.0",
   "scripts": {
-    "local": "env-cmd --no-override .env serverless offline -t --allowCache",
+    "local": "env-cmd --no-override .env serverless offline -t --allowCache --docker-network defaults",
     "populate:redis": "env-cmd --no-override .env node ./.mocks/populate_redis.js",
     "populate:dynamodb": "env-cmd --no-override .env node ./.mocks/populate_dynamodb.js",
     "checkconditions": "env-cmd --no-override .env serverless invoke local --function checkconditions --path ./src/CheckConditions/mock.json"

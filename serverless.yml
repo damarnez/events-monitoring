@@ -31,10 +31,6 @@ functions:
     package:
       include:
         - src/WatchLogsFromEthereum/logswatcher.ts
-    events:
-      - schedule:
-          rate: rate(1 minute)
-          enabled: true
     environment:
       - URL_INFURA: ${self:custom.url_infura}
       - DEV: ${self:custom.dev}
@@ -102,7 +98,7 @@ resources:
           WriteCapacityUnits: 5
         StreamSpecification:
           StreamViewType: "NEW_AND_OLD_IMAGES"
-        TableName: "Watchers"
+        TableName: "Watcher"
     HistoricDynamoDbTable:
       Type: "AWS::DynamoDB::Table"
       DeletionPolicy: Retain

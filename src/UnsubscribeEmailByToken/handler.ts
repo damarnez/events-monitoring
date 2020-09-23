@@ -18,7 +18,6 @@ export const unsubscribe = async (event: any) => {
       }
     );
     const watch: Watcher = watchers.find((wat) => wat.token === token);
-
     if (!watch) return message(404, "Invalid token");
     if (!watch.validated) return message(201, "Already unsubscribed");
     //Update the token and the validation field
@@ -28,10 +27,14 @@ export const unsubscribe = async (event: any) => {
         email,
         id: watch.id,
       },
-      "set validated = :r, token=:p",
+      "set #val = :v, #tok=:t",
       {
-        ":r": false,
-        ":p": uuidv4(),
+        "#tok": "token",
+        "#val": "validated",
+      },
+      {
+        ":v": false,
+        ":t": uuidv4(),
       }
     );
 

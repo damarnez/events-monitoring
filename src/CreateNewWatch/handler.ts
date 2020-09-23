@@ -22,6 +22,7 @@ Example post body
 
 export const create = async (event: any) => {
   try {
+    console.log(event.body.email);
     const requestBody = JSON.parse(event.body);
     const error = validation(requestBody);
     if (error) return error;
@@ -55,6 +56,7 @@ export const create = async (event: any) => {
 
     return message(200, "success!");
   } catch (error) {
+    console.error("[CreateNewWatch]", error);
     return message(500, "Something went wrong.");
   }
 };
@@ -62,10 +64,10 @@ export const create = async (event: any) => {
 function validation({ email, address, events }) {
   if (!isEmail(email)) return message(401, "Wrong email format");
   if (!isAddress(address)) return message(401, "Wrong address format");
-  if (events && events.lenght > 0) {
+  if (events && events.length > 0) {
     const hasError = events.some((event) => {
       if (isEmpty(event.name)) return true;
-      if (isHexadecimal(event.signature)) return true;
+      if (isEmpty(event.signature)) return true;
       if (
         !Number.isInteger(event.number) &&
         event.number < 0 &&
@@ -78,6 +80,7 @@ function validation({ email, address, events }) {
     // SUCCESS
     return false;
   } else {
+    console.error(" EVENTOS : ", events, events.length);
     return message(401, "Events array not found");
   }
 }

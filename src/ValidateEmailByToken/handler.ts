@@ -17,9 +17,9 @@ export const validate = async (event: any) => {
         ":email": email,
       }
     );
-    const watch: Watcher = watchers.find((wat) => wat.token === token);
 
-    if (!watch || watch.token !== token) return message(404, "Invalid token");
+    const watch: Watcher = watchers.find((wat) => wat?.token === token);
+    if (!watch) return message(404, "Invalid token");
     if (watch.validated) return message(201, "Already validated");
     //Update the token and the validation field
     await dynamodb.update(
@@ -28,10 +28,14 @@ export const validate = async (event: any) => {
         email,
         id: watch.id,
       },
-      "set validated = :r, token=:p",
+      "set #val = :v, #tok=:t",
       {
-        ":r": true,
-        ":p": uuidv4(),
+        "#tok": "token",
+        "#val": "validated",
+      },
+      {
+        ":v": true,
+        ":t": uuidv4(),
       }
     );
 

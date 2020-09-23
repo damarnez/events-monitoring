@@ -7,6 +7,7 @@ export enum Tables {
 
 class DynamoDBClient {
   private connection: any;
+
   constructor() {
     this.connection = process.env.IS_OFFLINE
       ? new DynamoDB.DocumentClient({
@@ -21,6 +22,7 @@ class DynamoDBClient {
       TableName: table,
       Item: data,
     };
+    console.log("ADD PARAMS: ", params);
     return await this.connection.put(params).promise();
   }
 
@@ -39,12 +41,14 @@ class DynamoDBClient {
     table: string,
     key: object,
     expression: string,
+    attrName: object,
     attrVal: object
   ) {
     var params = {
       TableName: table,
       Key: key,
       UpdateExpression: expression,
+      ExpressionAttributeNames: attrName,
       ExpressionAttributeValues: attrVal,
       ReturnValues: "UPDATED_NEW",
     };
@@ -57,14 +61,16 @@ class DynamoDBClient {
     expression: string,
     attrName: object,
     attrVal: object
-  ): Promise<A> {
+  ): Promise<A | undefined> {
     var params = {
       TableName: table,
       KeyConditionExpression: expression,
       ExpressionAttributeNames: attrName,
       ExpressionAttributeValues: attrVal,
     };
-    return await this.connection.query(params).promise();
+
+    const response = await this.connection.query(params).promise();
+    return response.Count > 0 ? response.Items : [];
   }
 }
 

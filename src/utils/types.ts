@@ -44,4 +44,4 @@ export interface Historic {
   id: string;
 }
 
-export type StoredData = Watcher | History;
+export type StoredData = Watcher | Historic;
