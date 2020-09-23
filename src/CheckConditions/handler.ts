@@ -23,7 +23,9 @@ export const check = async (maches: Match[]) => {
           blockNumber,
           address,
           timestamp: now,
-          user: watcher[2],
+          signature: watcher[1],
+          condition: parseInt(watcher[3]),
+          userId: watcher[2],
           id: `${address}:${now}`,
         });
 

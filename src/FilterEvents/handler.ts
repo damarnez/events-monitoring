@@ -17,7 +17,7 @@ export const filter = async (events: Block[]) => {
       if (
         !log.removed &&
         watchers[i][0] === log.address &&
-        watchers[i][1] === log.transactionHash
+        watchers[i][1] === log.topics[0]
       ) {
         const key = `count:${watchers[i][0]}:${watchers[i][1]}:${watchers[i][2]}`;
         try {

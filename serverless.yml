@@ -49,6 +49,34 @@ functions:
       - URL_REDIS: ${self:custom.url_redis}
       - URL_DYNAMODB: ${self:custom.url_dynamodb}
       - DEV: ${self:custom.dev}
+  unsubscribeemailbytoken:
+    handler: src/UnsubscribeEmailByToken/handler.unsubscribe
+    events:
+      - http:
+          path: email/unsubscribe/{email}/{token}
+          method: get
+          request:
+            parameters:
+              paths:
+                token: true
+                email: true
+  validateemailbytoken:
+    handler: src/ValidateEmailByToken/handler.validate
+    events:
+      - http:
+          path: email/validate/{email}/{token}
+          method: get
+          request:
+            parameters:
+              paths:
+                token: true
+                email: true
+  createnewwatch:
+    handler: src/CreateNewWatch/handler.create
+    events:
+      - http:
+          path: watch
+          method: post
 plugins:
   - serverless-plugin-typescript
   - serverless-offline-scheduler
@@ -60,20 +88,20 @@ resources:
       DeletionPolicy: Retain
       Properties:
         AttributeDefinitions:
-          - AttributeName: "id"
-            AttributeType: "S"
           - AttributeName: "email"
+            AttributeType: "S"
+          - AttributeName: "id"
             AttributeType: "S"
         KeySchema:
-          - AttributeName: "id"
-            KeyType: "HASH"
           - AttributeName: "email"
+            KeyType: "HASH"
+          - AttributeName: "id"
             KeyType: "RANGE"
         ProvisionedThroughput:
           ReadCapacityUnits: 5
           WriteCapacityUnits: 5
         StreamSpecification:
-          StreamViewType: "NEW_IMAGE"
+          StreamViewType: "NEW_AND_OLD_IMAGES"
         TableName: "Watchers"
     HistoricDynamoDbTable:
       Type: "AWS::DynamoDB::Table"

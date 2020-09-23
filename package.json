@@ -9,9 +9,11 @@
     "checkconditions": "env-cmd --no-override .env serverless invoke local --function checkconditions --path ./src/CheckConditions/mock.json"
   },
   "dependencies": {
-    "aws": "0.0.3-2",
     "axios": "^0.20.0",
-    "ioredis": "^4.17.3"
+    "ioredis": "^4.17.3",
+    "uuid": "^8.3.0",
+    "validator": "^13.1.17",
+    "web3-utils": "^1.3.0"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.61",
