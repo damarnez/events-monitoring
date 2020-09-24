@@ -7,7 +7,7 @@ const dynamodb = new DynamoDBClient();
 export const validate = async (event: any) => {
   const { email, token } = event.pathParameters;
   try {
-    const watchers: Watcher[] = await dynamodb.search(
+    const watchers: Watcher[] | undefined = await dynamodb.search(
       Tables.Watcher,
       "#e = :email",
       {
@@ -18,7 +18,9 @@ export const validate = async (event: any) => {
       }
     );
 
-    const watch: Watcher = watchers.find((wat) => wat?.token === token);
+    const watch: Watcher | undefined = watchers.find(
+      (wat) => wat?.token === token
+    );
     if (!watch) return message(404, "Invalid token");
     if (watch.validated) return message(201, "Already validated");
     //Update the token and the validation field

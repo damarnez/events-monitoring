@@ -1,6 +1,6 @@
 .build
 /node_modules
 .env
-
+.serverless
 /redis.conf
 /redis-data

@@ -56,7 +56,7 @@ export const create = async (event: any) => {
 
     return message(200, "success!");
   } catch (error) {
-    console.error("[CreateNewWatch]", error);
+    console.log("[CreateNewWatch]", error);
     return message(500, "Something went wrong.");
   }
 };
@@ -80,7 +80,7 @@ function validation({ email, address, events }) {
     // SUCCESS
     return false;
   } else {
-    console.error(" EVENTOS : ", events, events.length);
+    console.log(" EVENTOS : ", events, events.length);
     return message(401, "Events array not found");
   }
 }

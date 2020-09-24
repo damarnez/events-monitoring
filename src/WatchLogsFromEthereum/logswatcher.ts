@@ -72,10 +72,8 @@ class LogsWatcher {
         this.blockNumber = initBlock;
         callback(listLogs, initBlock);
       }
-      // start to check again
-      setTimeout(checkLogs, 1000);
     };
-    setTimeout(checkLogs, 1000);
+    setInterval(checkLogs, 1000);
   }
 }
 

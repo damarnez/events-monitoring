@@ -4,8 +4,21 @@ service: events-monitoring
 
 provider:
   name: aws
+  region: eu-central-1
   runtime: nodejs12.x
+  vpc:
+    securityGroupIds:
+      - sg-0b619b76
+    subnetIds:
+      - subnet-b44985c8
+      - subnet-d44b9898
+      - subnet-e273e288
   iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+      Resource: "*"
     - Effect: Allow
       Action:
         - dynamodb:Query
@@ -13,38 +26,41 @@ provider:
         - dynamodb:GetItem
         - dynamodb:PutItem
       Resource: "*"
+    - Effect: Allow
+      Action:
+        - elasticache:*
+      Resource: "*"
 custom:
   url_infura: ${env:URL_INFURA}
   url_redis: ${env:URL_REDIS}
   url_dynamodb: ${env:URL_DYNAMODB}
-  dev: ${env:DEV}
 
 package:
   # individually: true
   include:
-    - node_modules
     - src/utils
 
 functions:
-  watchlogsfromethereum:
+  watchlogs:
     handler: src/WatchLogsFromEthereum/handler.watch
+    timeout: 240
+    events:
+      - schedule:
+          rate: rate(1 minute)
+          enabled: true
     package:
       include:
         - src/WatchLogsFromEthereum/logswatcher.ts
     environment:
-      - URL_INFURA: ${self:custom.url_infura}
-      - DEV: ${self:custom.dev}
+      URL_INFURA: ${self:custom.url_infura}
   filterevents:
     handler: src/FilterEvents/handler.filter
     environment:
-      - URL_REDIS: ${self:custom.url_redis}
-      - DEV: ${self:custom.dev}
+      URL_REDIS: ${self:custom.url_redis}
   checkconditions:
     handler: src/CheckConditions/handler.check
     environment:
-      - URL_REDIS: ${self:custom.url_redis}
-      - URL_DYNAMODB: ${self:custom.url_dynamodb}
-      - DEV: ${self:custom.dev}
+      URL_REDIS: ${self:custom.url_redis}
   unsubscribeemailbytoken:
     handler: src/UnsubscribeEmailByToken/handler.unsubscribe
     events:
@@ -73,6 +89,16 @@ functions:
       - http:
           path: watch
           method: post
+  sendemailbytopic:
+    handler: src/SendEmailByTopic/handler.send
+    events:
+      - stream: arn:aws:dynamodb:eu-central-1:351020644073:table/Watcher/stream/2020-09-24T12:50:34.957
+      - stream: arn:aws:dynamodb:eu-central-1:351020644073:table/Historic/stream/2020-09-24T15:40:34.587
+  updatecounterstatus:
+    handler: src/UpdateCounterStatus/handler.update
+    events:
+      - stream: arn:aws:dynamodb:eu-central-1:351020644073:table/Watcher/stream/2020-09-24T12:50:34.957
+
 plugins:
   - serverless-plugin-typescript
   - serverless-offline-scheduler
@@ -113,5 +139,5 @@ resources:
           ReadCapacityUnits: 5
           WriteCapacityUnits: 5
         StreamSpecification:
-          StreamViewType: "KEYS_ONLY"
+          StreamViewType: "NEW_IMAGE"
         TableName: "Historic"

@@ -3,13 +3,14 @@
   "description": "",
   "version": "0.1.0",
   "scripts": {
+    "deploy": "env-cmd .env serverless deploy",
     "local": "env-cmd --no-override .env serverless offline -t --allowCache --docker-network defaults",
     "populate:redis": "env-cmd --no-override .env node ./.mocks/populate_redis.js",
     "populate:dynamodb": "env-cmd --no-override .env node ./.mocks/populate_dynamodb.js",
     "checkconditions": "env-cmd --no-override .env serverless invoke local --function checkconditions --path ./src/CheckConditions/mock.json"
   },
   "dependencies": {
-    "axios": "^0.20.0",
+    "axios": "^0.19.0",
     "ioredis": "^4.17.3",
     "uuid": "^8.3.0",
     "validator": "^13.1.17",

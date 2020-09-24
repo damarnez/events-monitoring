@@ -4,11 +4,11 @@ class LambdaClient {
   private connection: any;
   constructor() {
     this.connection = process.env.IS_OFFLINE
-      ? new Lambda()
-      : new Lambda({
+      ? new Lambda({
           apiVersion: "2031",
           endpoint: "http://localhost:3002",
-        });
+        })
+      : new Lambda();
   }
   public async invokeEvent(NAME, data) {
     return this.connection

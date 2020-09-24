@@ -7,6 +7,7 @@ const URL = process.env.URL_REDIS || "";
 const redis: any = new RedisClient(URL);
 
 export const filter = async (events: Block[]) => {
+  console.log("FILTER EVENTS", events);
   // watchers [address,signature,id,condition]
   const watchers: string[][] = await redis.getIndexed("watchers");
   console.log("[FILTEREVENTS]", " n watchers :", watchers.length);

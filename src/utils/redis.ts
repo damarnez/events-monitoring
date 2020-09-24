@@ -20,7 +20,7 @@ class RedisClient {
     return await this.connection.del(key);
   }
   public async getIndexed(key: string) {
-    const results = [];
+    const results: any = [];
     const members = await this.connection.smembers(key);
     for (let i = 0; i < members.length; i++) {
       const value: string = await this.connection.get(members[i].trim());
