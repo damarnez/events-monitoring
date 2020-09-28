@@ -15,7 +15,7 @@ export const check = async (maches: Match[]) => {
     // GET THE COUNTER VALUE
     console.log("[CHECKCONDITIONS]", "check key ", key);
     const counter = await redis.get(key);
-    if (parseInt(watcher[3]) === counter) {
+    if (parseInt(watcher[3]) === parseInt(counter)) {
       const now = Date.now();
       try {
         await dynamoDB.add(Tables.Historic, {

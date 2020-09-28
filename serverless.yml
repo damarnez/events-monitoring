@@ -6,13 +6,6 @@ provider:
   name: aws
   region: eu-central-1
   runtime: nodejs12.x
-  vpc:
-    securityGroupIds:
-      - sg-0b619b76
-    subnetIds:
-      - subnet-b44985c8
-      - subnet-d44b9898
-      - subnet-e273e288
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -21,17 +14,33 @@ provider:
       Resource: "*"
     - Effect: Allow
       Action:
+        - ec2:DescribeNetworkInterfaces
+        - ec2:CreateNetworkInterface
+        - ec2:DeleteNetworkInterface
+        - ec2:DescribeInstances
+        - ec2:AttachNetworkInterface
+      Resource: "*"
+    - Effect: Allow
+      Action:
         - dynamodb:Query
         - dynamodb:Scan
         - dynamodb:GetItem
         - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:GetRecords
       Resource: "*"
     - Effect: Allow
       Action:
         - elasticache:*
       Resource: "*"
+    - Effect: Allow
+      Action:
+        - ses:SendEmail
+        - ses:SendRawEmail
+      Resource: "*"
 custom:
-  url_infura: ${env:URL_INFURA}
+  url_infura_01: ${env:URL_INFURA_01}
+  url_infura_02: ${env:URL_INFURA_02}
   url_redis: ${env:URL_REDIS}
   url_dynamodb: ${env:URL_DYNAMODB}
 
@@ -43,30 +52,66 @@ package:
 functions:
   watchlogs:
     handler: src/WatchLogsFromEthereum/handler.watch
-    timeout: 240
+    timeout: 178
+    provisionedConcurrency: 0
+    concurrencyAutoscaling: false
     events:
       - schedule:
-          rate: rate(1 minute)
+          rate: rate(3 minutes)
           enabled: true
     package:
       include:
         - src/WatchLogsFromEthereum/logswatcher.ts
+    vpc:
+      securityGroupIds:
+        - sg-0b619b76
+      subnetIds:
+        - subnet-d44b9898
+        - subnet-e273e288
     environment:
-      URL_INFURA: ${self:custom.url_infura}
+      URL_INFURA_01: ${self:custom.url_infura_01}
+      URL_INFURA_02: ${self:custom.url_infura_02}
+      URL_REDIS: ${self:custom.url_redis}
   filterevents:
     handler: src/FilterEvents/handler.filter
+    vpc:
+      securityGroupIds:
+        - sg-0b619b76
+      subnetIds:
+        - subnet-d44b9898
+        - subnet-e273e288
     environment:
       URL_REDIS: ${self:custom.url_redis}
   checkconditions:
     handler: src/CheckConditions/handler.check
+    vpc:
+      securityGroupIds:
+        - sg-0b619b76
+      subnetIds:
+        - subnet-d44b9898
+        - subnet-e273e288
     environment:
       URL_REDIS: ${self:custom.url_redis}
+  updatecounterstatus:
+    handler: src/UpdateCounterStatus/handler.update
+    timeout: 240
+    environment:
+      URL_REDIS: ${self:custom.url_redis}
+    vpc:
+      securityGroupIds:
+        - sg-0b619b76
+      subnetIds:
+        - subnet-d44b9898
+        - subnet-e273e288
+    events:
+      - stream: arn:aws:dynamodb:eu-central-1:351020644073:table/Watcher/stream/2020-09-27T20:31:21.802
   unsubscribeemailbytoken:
     handler: src/UnsubscribeEmailByToken/handler.unsubscribe
     events:
       - http:
           path: email/unsubscribe/{email}/{token}
           method: get
+          cors: true
           request:
             parameters:
               paths:
@@ -78,6 +123,7 @@ functions:
       - http:
           path: email/validate/{email}/{token}
           method: get
+          cors: true
           request:
             parameters:
               paths:
@@ -89,15 +135,12 @@ functions:
       - http:
           path: watch
           method: post
+          cors: true
   sendemailbytopic:
     handler: src/SendEmailByTopic/handler.send
     events:
-      - stream: arn:aws:dynamodb:eu-central-1:351020644073:table/Watcher/stream/2020-09-24T12:50:34.957
-      - stream: arn:aws:dynamodb:eu-central-1:351020644073:table/Historic/stream/2020-09-24T15:40:34.587
-  updatecounterstatus:
-    handler: src/UpdateCounterStatus/handler.update
-    events:
-      - stream: arn:aws:dynamodb:eu-central-1:351020644073:table/Watcher/stream/2020-09-24T12:50:34.957
+      - stream: arn:aws:dynamodb:eu-central-1:351020644073:table/Watcher/stream/2020-09-27T20:31:21.802
+      - stream: arn:aws:dynamodb:eu-central-1:351020644073:table/Historic/stream/2020-09-27T20:31:21.737
 
 plugins:
   - serverless-plugin-typescript

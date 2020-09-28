@@ -1,0 +1,244 @@
+{
+  "Records": [
+    {
+      "eventID": "f90c510ec2d2a1f2aa628939e537db1a",
+      "eventName": "INSERT",
+      "eventVersion": "1.1",
+      "eventSource": "aws:dynamodb",
+      "awsRegion": "eu-central-1",
+      "dynamodb": {
+        "ApproximateCreationDateTime": 1601044377,
+        "Keys": { "id": "", "email": "" },
+        "NewImage": {
+          "address": { "S": "0x2C4561CaBab8e7a081c614F4c8aB248960a1026D" },
+          "validated": { "BOOL": false },
+          "id": { "S": "fc9079f1-6560-4b87-8323-2e7595b4a1c4" },
+          "event": { "M": {} },
+          "email": { "S": "dani.elnota@gmail.com" },
+          "timestamp": { "N": "1601052690460" },
+          "token": { "S": "9c4b8c2e-8cfc-466d-90c1-8c4d2d423a5e" }
+        },
+        "SequenceNumber": "4653300000000005877805890",
+        "SizeBytes": 312,
+        "StreamViewType": "NEW_AND_OLD_IMAGES"
+      },
+      "eventSourceARN": "arn:aws:dynamodb:eu-central-1:351020644073:table/Watcher/stream/2020-09-24T12:50:34.957"
+    },
+    {
+      "eventID": "79609b53f8e6be2384f119b983445699",
+      "eventName": "INSERT",
+      "eventVersion": "1.1",
+      "eventSource": "aws:dynamodb",
+      "awsRegion": "eu-central-1",
+      "dynamodb": {
+        "ApproximateCreationDateTime": 1601044377,
+        "Keys": { "id": "", "email": "" },
+        "NewImage": {
+          "address": { "S": "0x2C4561CaBab8e7a081c614F4c8aB248960a1026D" },
+          "validated": { "BOOL": false },
+          "id": { "S": "fc9079f1-6560-4b87-8323-2e7595b4a1c4" },
+          "event": { "M": {} },
+          "email": { "S": "dani.elnota@gmail.com" },
+          "timestamp": { "N": "1601052690460" },
+          "token": { "S": "9c4b8c2e-8cfc-466d-90c1-8c4d2d423a5e" }
+        },
+        "SequenceNumber": "4653300000000005877805890",
+        "SizeBytes": 312,
+        "StreamViewType": "NEW_AND_OLD_IMAGES"
+      },
+      "eventSourceARN": "arn:aws:dynamodb:eu-central-1:351020644073:table/Watcher/stream/2020-09-24T12:50:34.957"
+    },
+    {
+      "eventID": "1ff841076f7d0031ef87caf88f09a2eb",
+      "eventName": "INSERT",
+      "eventVersion": "1.1",
+      "eventSource": "aws:dynamodb",
+      "awsRegion": "eu-central-1",
+      "dynamodb": {
+        "ApproximateCreationDateTime": 1601044377,
+        "Keys": { "id": "", "email": "" },
+        "NewImage": {
+          "address": { "S": "0x2C4561CaBab8e7a081c614F4c8aB248960a1026D" },
+          "validated": { "BOOL": false },
+          "id": { "S": "fc9079f1-6560-4b87-8323-2e7595b4a1c4" },
+          "event": { "M": {} },
+          "email": { "S": "dani.elnota@gmail.com" },
+          "timestamp": { "N": "1601052690460" },
+          "token": { "S": "9c4b8c2e-8cfc-466d-90c1-8c4d2d423a5e" }
+        },
+        "SequenceNumber": "4653300000000005877805890",
+        "SizeBytes": 312,
+        "StreamViewType": "NEW_AND_OLD_IMAGES"
+      },
+      "eventSourceARN": "arn:aws:dynamodb:eu-central-1:351020644073:table/Watcher/stream/2020-09-24T12:50:34.957"
+    },
+    {
+      "eventID": "ce3782b7584c8eca5d63673cd9bbbaac",
+      "eventName": "INSERT",
+      "eventVersion": "1.1",
+      "eventSource": "aws:dynamodb",
+      "awsRegion": "eu-central-1",
+      "dynamodb": {
+        "ApproximateCreationDateTime": 1601044377,
+        "Keys": { "id": "", "email": "" },
+        "NewImage": {
+          "address": { "S": "0x2C4561CaBab8e7a081c614F4c8aB248960a1026D" },
+          "validated": { "BOOL": false },
+          "id": { "S": "fc9079f1-6560-4b87-8323-2e7595b4a1c4" },
+          "event": { "M": {} },
+          "email": { "S": "dani.elnota@gmail.com" },
+          "timestamp": { "N": "1601052690460" },
+          "token": { "S": "9c4b8c2e-8cfc-466d-90c1-8c4d2d423a5e" }
+        },
+        "SequenceNumber": "4653300000000005877805890",
+        "SizeBytes": 312,
+        "StreamViewType": "NEW_AND_OLD_IMAGES"
+      },
+      "eventSourceARN": "arn:aws:dynamodb:eu-central-1:351020644073:table/Watcher/stream/2020-09-24T12:50:34.957"
+    },
+    {
+      "eventID": "f9489e943b7bbe9485a3229e81438229",
+      "eventName": "INSERT",
+      "eventVersion": "1.1",
+      "eventSource": "aws:dynamodb",
+      "awsRegion": "eu-central-1",
+      "dynamodb": {
+        "ApproximateCreationDateTime": 1601044377,
+        "Keys": { "id": "", "email": "" },
+        "NewImage": {
+          "address": { "S": "0x2C4561CaBab8e7a081c614F4c8aB248960a1026D" },
+          "validated": { "BOOL": false },
+          "id": { "S": "fc9079f1-6560-4b87-8323-2e7595b4a1c4" },
+          "event": { "M": {} },
+          "email": { "S": "dani.elnota@gmail.com" },
+          "timestamp": { "N": "1601052690460" },
+          "token": { "S": "9c4b8c2e-8cfc-466d-90c1-8c4d2d423a5e" }
+        },
+        "SequenceNumber": "4653300000000005877805890",
+        "SizeBytes": 312,
+        "StreamViewType": "NEW_AND_OLD_IMAGES"
+      },
+      "eventSourceARN": "arn:aws:dynamodb:eu-central-1:351020644073:table/Watcher/stream/2020-09-24T12:50:34.957"
+    },
+    {
+      "eventID": "456b5ad477570ec33e4b3b0f982d4049",
+      "eventName": "INSERT",
+      "eventVersion": "1.1",
+      "eventSource": "aws:dynamodb",
+      "awsRegion": "eu-central-1",
+      "dynamodb": {
+        "ApproximateCreationDateTime": 1601044377,
+        "Keys": { "id": "", "email": "" },
+        "NewImage": {
+          "address": { "S": "0x2C4561CaBab8e7a081c614F4c8aB248960a1026D" },
+          "validated": { "BOOL": false },
+          "id": { "S": "fc9079f1-6560-4b87-8323-2e7595b4a1c4" },
+          "event": { "M": {} },
+          "email": { "S": "dani.elnota@gmail.com" },
+          "timestamp": { "N": "1601052690460" },
+          "token": { "S": "9c4b8c2e-8cfc-466d-90c1-8c4d2d423a5e" }
+        },
+        "SequenceNumber": "4653300000000005877805890",
+        "SizeBytes": 312,
+        "StreamViewType": "NEW_AND_OLD_IMAGES"
+      },
+      "eventSourceARN": "arn:aws:dynamodb:eu-central-1:351020644073:table/Watcher/stream/2020-09-24T12:50:34.957"
+    },
+    {
+      "eventID": "477b803b52f50ec3f4bfd61d06610baf",
+      "eventName": "INSERT",
+      "eventVersion": "1.1",
+      "eventSource": "aws:dynamodb",
+      "awsRegion": "eu-central-1",
+      "dynamodb": {
+        "ApproximateCreationDateTime": 1601044377,
+        "Keys": { "id": "", "email": "" },
+        "NewImage": {
+          "address": { "S": "0x2C4561CaBab8e7a081c614F4c8aB248960a1026D" },
+          "validated": { "BOOL": false },
+          "id": { "S": "fc9079f1-6560-4b87-8323-2e7595b4a1c4" },
+          "event": { "M": {} },
+          "email": { "S": "dani.elnota@gmail.com" },
+          "timestamp": { "N": "1601052690460" },
+          "token": { "S": "9c4b8c2e-8cfc-466d-90c1-8c4d2d423a5e" }
+        },
+        "SequenceNumber": "4653300000000005877805890",
+        "SizeBytes": 312,
+        "StreamViewType": "NEW_AND_OLD_IMAGES"
+      },
+      "eventSourceARN": "arn:aws:dynamodb:eu-central-1:351020644073:table/Watcher/stream/2020-09-24T12:50:34.957"
+    },
+    {
+      "eventID": "2594bc4e6bc69534bf1cc10cc01b1ac8",
+      "eventName": "INSERT",
+      "eventVersion": "1.1",
+      "eventSource": "aws:dynamodb",
+      "awsRegion": "eu-central-1",
+      "dynamodb": {
+        "ApproximateCreationDateTime": 1601044377,
+        "Keys": { "id": "", "email": "" },
+        "NewImage": {
+          "address": { "S": "0x2C4561CaBab8e7a081c614F4c8aB248960a1026D" },
+          "validated": { "BOOL": false },
+          "id": { "S": "fc9079f1-6560-4b87-8323-2e7595b4a1c4" },
+          "event": { "M": {} },
+          "email": { "S": "dani.elnota@gmail.com" },
+          "timestamp": { "N": "1601052690460" },
+          "token": { "S": "9c4b8c2e-8cfc-466d-90c1-8c4d2d423a5e" }
+        },
+        "SequenceNumber": "4653300000000005877805890",
+        "SizeBytes": 312,
+        "StreamViewType": "NEW_AND_OLD_IMAGES"
+      },
+      "eventSourceARN": "arn:aws:dynamodb:eu-central-1:351020644073:table/Watcher/stream/2020-09-24T12:50:34.957"
+    },
+    {
+      "eventID": "92acdbd987f7d7530eb80dcba00e3e79",
+      "eventName": "INSERT",
+      "eventVersion": "1.1",
+      "eventSource": "aws:dynamodb",
+      "awsRegion": "eu-central-1",
+      "dynamodb": {
+        "ApproximateCreationDateTime": 1601044377,
+        "Keys": { "id": "", "email": "" },
+        "NewImage": {
+          "address": { "S": "0x2C4561CaBab8e7a081c614F4c8aB248960a1026D" },
+          "validated": { "BOOL": false },
+          "id": { "S": "fc9079f1-6560-4b87-8323-2e7595b4a1c4" },
+          "event": { "M": {} },
+          "email": { "S": "dani.elnota@gmail.com" },
+          "timestamp": { "N": "1601052690460" },
+          "token": { "S": "9c4b8c2e-8cfc-466d-90c1-8c4d2d423a5e" }
+        },
+        "SequenceNumber": "4653300000000005877805890",
+        "SizeBytes": 312,
+        "StreamViewType": "NEW_AND_OLD_IMAGES"
+      },
+      "eventSourceARN": "arn:aws:dynamodb:eu-central-1:351020644073:table/Watcher/stream/2020-09-24T12:50:34.957"
+    },
+    {
+      "eventID": "bec8d9bae7bee9e9e023e75e7fd874fd",
+      "eventName": "INSERT",
+      "eventVersion": "1.1",
+      "eventSource": "aws:dynamodb",
+      "awsRegion": "eu-central-1",
+      "dynamodb": {
+        "ApproximateCreationDateTime": 1601044377,
+        "Keys": { "id": "", "email": "" },
+        "NewImage": {
+          "address": { "S": "0x2C4561CaBab8e7a081c614F4c8aB248960a1026D" },
+          "validated": { "BOOL": false },
+          "id": { "S": "fc9079f1-6560-4b87-8323-2e7595b4a1c4" },
+          "event": { "M": {} },
+          "email": { "S": "dani.elnota@gmail.com" },
+          "timestamp": { "N": "1601052690460" },
+          "token": { "S": "9c4b8c2e-8cfc-466d-90c1-8c4d2d423a5e" }
+        },
+        "SequenceNumber": "4653300000000005877805890",
+        "SizeBytes": 312,
+        "StreamViewType": "NEW_AND_OLD_IMAGES"
+      },
+      "eventSourceARN": "arn:aws:dynamodb:eu-central-1:351020644073:table/Watcher/stream/2020-09-24T12:50:34.957"
+    }
+  ]
+}

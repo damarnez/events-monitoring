@@ -1,3 +1,4 @@
+import { APIGateway } from "aws-sdk";
 import DynamoDBClient, { Tables } from "../utils/dynamodb";
 import { isAddress } from "web3-utils";
 import isEmail from "validator/lib/isEmail";
@@ -22,7 +23,6 @@ Example post body
 
 export const create = async (event: any) => {
   try {
-    console.log(event.body.email);
     const requestBody = JSON.parse(event.body);
     const error = validation(requestBody);
     if (error) return error;
@@ -54,7 +54,7 @@ export const create = async (event: any) => {
       });
     }
 
-    return message(200, "success!");
+    return message(200, "success");
   } catch (error) {
     console.log("[CreateNewWatch]", error);
     return message(500, "Something went wrong.");

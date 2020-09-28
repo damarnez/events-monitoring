@@ -1,6 +1,7 @@
 interface Response {
   statusCode: number;
   body: string;
+  headers: object;
 }
 
 export default function message(
@@ -10,13 +11,9 @@ export default function message(
 ): Response {
   return {
     statusCode: code,
-    body: JSON.stringify(
-      {
-        message: message,
-        data,
-      },
-      null,
-      2
-    ),
+    headers: {
+      "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+    },
+    body: JSON.stringify({ message: message, data }),
   };
 }

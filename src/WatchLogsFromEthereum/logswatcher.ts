@@ -1,79 +1,123 @@
 import axios from "axios";
 import { Block } from "../utils/types";
 
+const POLLING_TIME = 5000;
 class LogsWatcher {
-  private URL: string;
-  private blockNumber: number = 0;
+  private URLS: string[];
+  private node: number = 0;
+  private diff: number = 15;
 
-  constructor(urlNode: string) {
-    this.URL = urlNode;
+  constructor(urlNode: string[], diff: number) {
+    this.URLS = urlNode;
+    this.diff = diff;
   }
-  private async getNextBlockNumber(diff: number) {
-    const nBlock = await this.getLatestBlockNumber();
-    let next = nBlock - diff;
-    if (next === this.blockNumber) return next;
-    if (this.blockNumber !== 0) {
-      next = this.blockNumber + 1;
+  private async calculateFromBlock(actualBlock: number, blockNumber: number) {
+    let next = actualBlock - this.diff;
+    if (blockNumber === 0) return next;
+    if (next < blockNumber) return -1;
+    return blockNumber;
+  }
+  private async calculateToBlock(actualBlock: number, fromBlock: number) {
+    if (fromBlock < 0) return fromBlock;
+    const currentDiff = actualBlock - fromBlock;
+    // If the different is bigger than 5 blocks
+    if (currentDiff > this.diff + 5) {
+      // Sync data
+      console.log("SYNC BLOCKS : from ", fromBlock, " to ", fromBlock + 5);
+      return fromBlock + 5;
+    } else {
+      return fromBlock;
     }
-    return next;
   }
-  private async getLatestBlockNumber(): Promise<number> {
-    const response = await axios.post(
-      this.URL,
-      {
-        jsonrpc: "2.0",
-        id: 1,
-        method: "eth_blockNumber",
-        params: ["latest", false],
-      },
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+  public async getLatestBlockNumber(): Promise<number> {
+    try {
+      const response = await axios.post(
+        this.URLS[this.node],
+        {
+          jsonrpc: "2.0",
+          id: 1,
+          method: "eth_blockNumber",
+          params: ["latest", false],
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
-    return parseInt(response.data.result, 16);
+      return parseInt(response.data.result, 16);
+    } catch (error) {
+      if (error?.response?.status === 429) {
+        console.log("Limit reached switch the token ");
+        if (this.node === 0) this.node = 1;
+        else this.node = 0;
+        return await this.getLatestBlockNumber();
+      }
+      throw error;
+    }
   }
   private async getLogs(filterOptions: {
     fromBlock: string;
     toBlock: string;
   }): Promise<Block[]> {
-    const response = await axios.post(
-      this.URL,
-      {
-        jsonrpc: "2.0",
-        id: 1,
-        method: "eth_getLogs",
-        params: [filterOptions],
-      },
-      {
-        headers: { "Content-Type": "application/json" },
+    try {
+      const response = await axios.post(
+        this.URLS[this.node],
+        {
+          jsonrpc: "2.0",
+          id: 1,
+          method: "eth_getLogs",
+          params: [filterOptions],
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      switch (response.status) {
+        case 200:
+          return response.data.result;
+        default:
+          // ERROR FROM INFURA
+          console.error(response.data);
+          return [];
       }
-    );
-    switch (response.status) {
-      case 200:
-        return response.data.result;
-      default:
-        // ERROR FROM INFURA
-        console.error(response.data);
-        return [];
+    } catch (error) {
+      if (error?.response?.status === 429) {
+        console.log("Limit reached switch the token ");
+        if (this.node === 0) this.node = 1;
+        else this.node = 0;
+        return await this.getLogs(filterOptions);
+      }
+      throw error;
     }
   }
 
-  public pollingLogs(diff: number, callback) {
-    const checkLogs = async () => {
-      const initBlock = await this.getNextBlockNumber(diff);
+  public async pollingLogs(blockNumber: number) {
+    const actualBlock = await this.getLatestBlockNumber();
 
-      if (initBlock !== this.blockNumber) {
-        const listLogs = await this.getLogs({
-          fromBlock: `0x${initBlock.toString(16)}`,
-          toBlock: `0x${(initBlock + 1).toString(16)}`,
-        });
-        // Update the last block check
-        this.blockNumber = initBlock;
-        callback(listLogs, initBlock);
-      }
+    const fromBlock = await this.calculateFromBlock(actualBlock, blockNumber);
+    const toBlock = await this.calculateToBlock(actualBlock, fromBlock);
+
+    let listLogs = [];
+    if (fromBlock > -1) {
+      console.log(
+        "$$$$$$$$$$$$$$$$$ FROM REQUEST ---> ",
+        fromBlock,
+        " --- ",
+        toBlock,
+        " Sync",
+        toBlock - fromBlock,
+        " ACTUALBLOCK: ",
+        actualBlock
+      );
+      listLogs = await this.getLogs({
+        fromBlock: `0x${fromBlock.toString(16)}`,
+        toBlock: `0x${toBlock.toString(16)}`,
+      });
+    }
+    return {
+      block: toBlock,
+      logs: listLogs,
     };
-    setInterval(checkLogs, 1000);
   }
 }
 

@@ -45,3 +45,7 @@ export interface Historic {
 }
 
 export type StoredData = Watcher | Historic;
+
+export interface EventConfig {
+  [key: string]: string[];
+}

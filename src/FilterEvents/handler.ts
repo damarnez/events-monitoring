@@ -7,28 +7,51 @@ const URL = process.env.URL_REDIS || "";
 const redis: any = new RedisClient(URL);
 
 export const filter = async (events: Block[]) => {
-  console.log("FILTER EVENTS", events);
+  console.log("FILTER EVENTS", events.length);
   // watchers [address,signature,id,condition]
   const watchers: string[][] = await redis.getIndexed("watchers");
   console.log("[FILTEREVENTS]", " n watchers :", watchers.length);
+
   // Search blocks
   const maches: Match[] = events.reduce(async (prev: any, log: Block) => {
+    console.log("BLOCKNUMBER: ", parseInt(log.blockNumber));
+    console.log("TOPIC: ", log.topics[0]);
+    console.log("ADDRESS: ", log.address);
     // Check all the watchers
-    for (let i = 0; i < watchers.length; i++) {
+    for (const watcher of watchers) {
+      console.log(
+        ">>> CHECK  ADDRESS: ",
+        watcher[0],
+        " === ",
+        log.address.toLowerCase()
+      );
+      console.log(
+        "CHECK SIGNATURE: ",
+        watcher[1],
+        " === ",
+        log.topics[0].toLowerCase()
+      );
+      console.log(
+        " CHECK REMOVED ",
+        !log.removed,
+        " --------------> ",
+        log.removed
+      );
+
       if (
         !log.removed &&
-        watchers[i][0] === log.address &&
-        watchers[i][1] === log.topics[0]
+        watcher[0].toLowerCase() === log.address.toLowerCase() &&
+        watcher[1].toLowerCase() === log.topics[0].toLowerCase()
       ) {
-        const key = `count:${watchers[i][0]}:${watchers[i][1]}:${watchers[i][2]}`;
+        const key = `count:${watcher[0]}:${watcher[1]}:${watcher[2]}`;
         try {
           // Update the counters
           await redis.incr(key);
           prev.push({
             blockHash: log.blockHash,
             blockNumber: log.blockNumber,
-            address: log.address,
-            watcher: watchers[i],
+            address: log.address.toLocaleLowerCase(),
+            watcher,
           });
         } catch (error) {
           console.error("Error on increase the counter ", key);
@@ -48,4 +71,6 @@ export const filter = async (events: Block[]) => {
   } else {
     console.log("[FILTEREVENTS]", " No counters to check ");
   }
+
+  return true;
 };

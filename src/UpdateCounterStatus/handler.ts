@@ -1,13 +1,61 @@
-import { Handler } from "aws-lambda";
+import FilterStreams, { EventNames } from "../utils/filterStreams";
+import { Tables } from "../utils/dynamodb";
+import { EventConfig } from "../utils/types";
+import RedisClient from "../utils/redis";
 
-export const update: Handler = (event: any) => {
-  console.log(JSON.stringify(event, null, 2));
-  // Check the modification
-  // if MODIFY
-  //// if is old_validated = false and new_validated = true
-  ////// Load the object from dynamoDB
-  ////// Set the new watcher in redis
-  //// else if old_validated = true and new_validated = false
-  ////// Load the object from dynamoDB
-  ////// remove the watcher from redis
+const URL = process.env.URL_REDIS || "";
+
+const config: EventConfig = {
+  [Tables.Watcher]: [EventNames.MODIFY],
+};
+const filterData = new FilterStreams(config);
+
+const redis = new RedisClient(URL);
+
+export const update = async (stream: any, context: any) => {
+  console.log("CONNECT TO REDIS : ", URL);
+
+  try {
+    const data = filterData.parse(stream);
+    console.log(JSON.stringify(data, null, 2));
+
+    for (let i = 0; i < data.length; i++) {
+      const item = data[i];
+      console.log("DATA: ", item.dynamodb, item.dynamodb.NewImage);
+      if (
+        item.eventName === EventNames.MODIFY &&
+        item.Table === Tables.Watcher &&
+        item.dynamodb.NewImage.validated.BOOL !==
+          item.dynamodb.OldImage.validated.BOOL &&
+        item.dynamodb.NewImage.validated.BOOL === true
+      ) {
+        const { address, event, id } = item.dynamodb.NewImage;
+        console.log("#ADD ", id.S);
+        await redis.add(
+          id.S,
+          JSON.stringify([
+            address.S.toLowerCase(),
+            event.M.signature.S.toLowerCase(),
+            id.S,
+            event.M.counter.N,
+          ]),
+          "watchers"
+        );
+      } else if (
+        item.eventName === EventNames.MODIFY &&
+        item.Table === Tables.Watcher &&
+        item.dynamodb.NewImage.validated.BOOL !==
+          item.dynamodb.OldImage.validated.BOOL &&
+        item.dynamodb.NewImage.validated.BOOL === false
+      ) {
+        const { id } = item.dynamodb.NewImage;
+        console.log("#REMOVE ", id.S);
+        await redis.remove(id.S, "watchers");
+      }
+    }
+  } catch (error) {
+    console.log("[SENDEMAILBYTOPIC] Error: ", error);
+    return true;
+  }
+  return true;
 };
