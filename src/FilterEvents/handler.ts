@@ -11,9 +11,9 @@ export const filter = async (events: Block[]) => {
   // watchers [address,signature,id,condition]
   const watchers: string[][] = await redis.getIndexed("watchers");
   console.log("[FILTEREVENTS]", " n watchers :", watchers.length);
-
+  const maches: Match[] = [];
   // Search blocks
-  const maches: Match[] = events.reduce(async (prev: any, log: Block) => {
+  for (const log of events) {
     console.log("BLOCKNUMBER: ", parseInt(log.blockNumber));
     console.log("TOPIC: ", log.topics[0]);
     console.log("ADDRESS: ", log.address);
@@ -47,19 +47,18 @@ export const filter = async (events: Block[]) => {
         try {
           // Update the counters
           await redis.incr(key);
-          prev.push({
+          maches.push({
             blockHash: log.blockHash,
             blockNumber: log.blockNumber,
             address: log.address.toLocaleLowerCase(),
             watcher,
           });
         } catch (error) {
-          console.error("Error on increase the counter ", key);
+          console.error("Error on increase the counter ", key, error);
         }
       }
     }
-    return prev;
-  }, []);
+  }
 
   if (maches && maches.length > 0) {
     console.log(
