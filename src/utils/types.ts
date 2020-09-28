@@ -41,6 +41,7 @@ export interface Historic {
   signature: string;
   condition: number;
   userId: string;
+  email: string;
   id: string;
 }
 

@@ -40,12 +40,7 @@ class RedisClient {
   }
   public async incr(key: string) {
     await this.checkConnection();
-    const val = await this.get(key);
-    if (val) {
-      return await this.connection.incr(key);
-    } else {
-      return await this.add(key, "1");
-    }
+    return await this.connection.incr(key);
   }
   public async add(key: string, value: string, member?: string) {
     await this.checkConnection();

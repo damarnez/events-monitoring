@@ -8,7 +8,7 @@ const redis: any = new RedisClient(URL);
 
 export const filter = async (events: Block[]) => {
   console.log("FILTER EVENTS", events.length);
-  // watchers [address,signature,id,condition]
+  // watchers [address,signature,id,condition, email]
   const watchers: string[][] = await redis.getIndexed("watchers");
   console.log("[FILTEREVENTS]", " n watchers :", watchers.length);
   const maches: Match[] = [];

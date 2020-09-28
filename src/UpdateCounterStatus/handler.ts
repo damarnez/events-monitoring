@@ -29,7 +29,7 @@ export const update = async (stream: any, context: any) => {
           item.dynamodb.OldImage.validated.BOOL &&
         item.dynamodb.NewImage.validated.BOOL === true
       ) {
-        const { address, event, id } = item.dynamodb.NewImage;
+        const { address, event, id, email } = item.dynamodb.NewImage;
         console.log("#ADD ", id.S);
         await redis.add(
           id.S,
@@ -38,6 +38,7 @@ export const update = async (stream: any, context: any) => {
             event.M.signature.S.toLowerCase(),
             id.S,
             event.M.counter.N,
+            email.S,
           ]),
           "watchers"
         );

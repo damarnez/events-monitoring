@@ -14,13 +14,13 @@ export enum Templates {
 
 const bodyText = {
   [Templates.REGISTER]:
-    '<br>Please, validate you email to start watch your event from the contract <b> {{address.S}} </b> </br><br><a href="{{URL}}/dev/email/validate/{{email.S}}/{{token.S}}">Validate</a>',
+    '<br>Please, validate you email to start. ADDRESS <b> {{address.S}} </b> </br><br><a href="{{URL}}/dev/email/validate/{{email.S}}/{{token.S}}">Validate</a>',
   [Templates.VALIDATED]:
     '<br>Thanks for validate you email</br><br>Now we start to watch the event <b>{{event.M.name.S}}</b> each <b>{{event.M.counter.N}}</b> on <b>{{address.S}}</b></br><br><a href="{{URL}}/dev/email/unsubscribe/{{email.S}}/{{token.S}}">Unsubscribe</a>',
   [Templates.UNSUBSCRIBE]:
     "<br><b>Thank you </b>. You are successfully remove from the subscribed list.</br>",
   [Templates.CONDITION]:
-    "<br>Condition YourEvent({{signature.S}}) === {{condition.N}}</br><br>triggered ons block {{BlockNumber.N}} at {{timestamp.N}}</br>",
+    "<br>Condition with signature ({{signature.S}}) === {{condition.N}}</br><br> last block number {{BlockNumber.N}} at {{timestamp.N}}</br>",
 };
 
 const subectText = {

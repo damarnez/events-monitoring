@@ -10,11 +10,17 @@ export const check = async (maches: Match[]) => {
   console.log("[CHECKCONDITIONS]", "start lambda");
   for (let i = 0; i < maches.length; i++) {
     const { watcher, blockHash, blockNumber, address } = maches[i];
-    // watchers [address,signature,id,condition]
+    // watchers [address,signature,id,condition,email]
     const key = `count:${watcher[0]}:${watcher[1]}:${watcher[2]}`;
     // GET THE COUNTER VALUE
     console.log("[CHECKCONDITIONS]", "check key ", key);
     const counter = await redis.get(key);
+    console.log(
+      "CHECK CONDITIONS : ",
+      parseInt(watcher[3]),
+      " === ",
+      parseInt(counter)
+    );
     if (parseInt(watcher[3]) === parseInt(counter)) {
       const now = Date.now();
       try {
@@ -26,6 +32,7 @@ export const check = async (maches: Match[]) => {
           signature: watcher[1],
           condition: parseInt(watcher[3]),
           userId: watcher[2],
+          email: watcher[4],
           id: `${address}:${now}`,
         });
 
