@@ -1,8 +1,6 @@
-import { APIGateway } from "aws-sdk";
 import DynamoDBClient, { Tables } from "../utils/dynamodb";
 import { isAddress } from "web3-utils";
 import isEmail from "validator/lib/isEmail";
-import isHexadecimal from "validator/lib/isHexadecimal";
 import isEmpty from "validator/lib/isEmpty";
 import { Event } from "../utils/types";
 import message from "../utils/responses";
@@ -80,7 +78,6 @@ function validation({ email, address, events }) {
     // SUCCESS
     return false;
   } else {
-    console.log(" EVENTOS : ", events, events.length);
     return message(401, "Events array not found");
   }
 }

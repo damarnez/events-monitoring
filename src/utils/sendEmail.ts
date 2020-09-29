@@ -53,6 +53,9 @@ export const sendEmail = (type: Templates, data: any) => {
       },
       Source: "noreply@refractive.xyz",
     };
+    // Test ENV
+    if (process.env.IS_OFFLINE)
+      return console.log("- EMAIL SENDED TEST -", params);
 
     ses.sendEmail(params, function (err, data) {
       if (err) {

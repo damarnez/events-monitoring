@@ -31,21 +31,17 @@ export const filter = async (events: Block[]) => {
             watcher,
           });
         } catch (error) {
-          console.error("Error on increase the counter ", key, error);
+          console.error("ERROR:  ", key, error);
         }
       }
     }
   }
 
   if (maches && maches.length > 0) {
-    console.log(
-      "[FilterEvents]",
-      " invoke next lambda to check the conditions"
-    );
     const lambda = new Lambda();
     await lambda.invokeEvent(EVENT_NAME, maches);
   } else {
-    console.log("[FILTEREVENTS]", " No counters to check ");
+    console.log("[FILTEREVENTS]", "No match in this chunk ");
   }
 
   return true;

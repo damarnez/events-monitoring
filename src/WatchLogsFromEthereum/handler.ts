@@ -4,6 +4,7 @@ import LogsWatcher from "./logswatcher";
 import RedisClient from "../utils/redis";
 
 const DIFF = 15;
+const CHUNK_SIZE = 300;
 const LOOP_TIME = 5000;
 const EVENT_NAME = "events-monitoring-dev-filterevents";
 const URLCLIENT_01 = process.env.URL_INFURA_01 || "";
@@ -35,8 +36,17 @@ export const watch = async (stream: any, context: any) => {
 
       // If we have results then we invoke next lambda
       if (logs && logs.length > 0) {
-        const lambda = new Lambda();
-        await lambda.invokeEvent(EVENT_NAME, logs);
+        // Check if the chunk is big
+        if (logs.length > CHUNK_SIZE) {
+          const chunks = createChunks(logs, CHUNK_SIZE);
+          for (let i = 0; i < chunks.length; i++) {
+            const lambda = new Lambda();
+            await lambda.invokeEvent(EVENT_NAME, chunks[i]);
+          }
+        } else {
+          const lambda = new Lambda();
+          await lambda.invokeEvent(EVENT_NAME, logs);
+        }
       }
       // If the calculation of the block are different to -1 then we update to the next block
       if (block != -1) {
@@ -57,4 +67,12 @@ export const watch = async (stream: any, context: any) => {
   } finally {
     return true;
   }
+};
+
+const createChunks = (array: any[], n: number) => {
+  // Chunking array
+  const numberChunks = Math.ceil(array.length / n);
+  return [...Array(numberChunks).keys()].map((x, i) =>
+    array.slice(i * n, i * n + n)
+  );
 };

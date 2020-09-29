@@ -46,7 +46,7 @@ export const send = async (stream: any) => {
       }
     }
   } catch (error) {
-    console.log("[SENDEMAILBYTOPIC] Error: ", error);
+    console.error("[SENDEMAILBYTOPIC]", "ERROR: ", error);
     throw error;
   }
 };

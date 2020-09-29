@@ -12,7 +12,7 @@ const filterData = new FilterStreams(config);
 
 const redis = new RedisClient(URL);
 
-export const update = async (stream: any, context: any) => {
+export const update = async (stream: any) => {
   try {
     const data = filterData.parse(stream);
 
