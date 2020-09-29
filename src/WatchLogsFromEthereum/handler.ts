@@ -36,6 +36,13 @@ export const watch = async (stream: any, context: any) => {
 
       // If we have results then we invoke next lambda
       if (logs && logs.length > 0) {
+        console.log(
+          "[WatchLogsFromEthereum]",
+          " found ",
+          logs.length,
+          " in block ",
+          block
+        );
         // Check if the chunk is big
         if (logs.length > CHUNK_SIZE) {
           const chunks = createChunks(logs, CHUNK_SIZE);

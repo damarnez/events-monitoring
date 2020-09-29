@@ -11,7 +11,7 @@ services:
         ipv4_address: 172.28.1.5
   redis:
     image: "redis:alpine"
-    command: redis-server --requirepass sOmE_sEcUrE_pAsS
+    command: redis-server
     ports:
       - "6379:6379"
     volumes:
