@@ -2,6 +2,8 @@
 
 Frontend : https://gitlab.com/damarnez/events-monitoring-front
 
+![](.doc/schema.png)
+
 ## Local environment
 
 ### Create .env.local file
