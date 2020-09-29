@@ -7,13 +7,11 @@ const redis = new RedisClient(URLREDIS);
 const dynamoDB = new DynamoDBClient();
 
 export const check = async (maches: Match[]) => {
-  console.log("[CHECKCONDITIONS]", "start lambda");
   for (let i = 0; i < maches.length; i++) {
     const { watcher, blockHash, blockNumber, address } = maches[i];
     // watchers [address,signature,id,condition,email]
     const key = `count:${watcher[0]}:${watcher[1]}:${watcher[2]}`;
     // GET THE COUNTER VALUE
-    console.log("[CHECKCONDITIONS]", "check key ", key);
     const counter = await redis.get(key);
     console.log(
       "CHECK CONDITIONS : ",
@@ -44,7 +42,7 @@ export const check = async (maches: Match[]) => {
           error
         );
       }
-    } else console.log("CONDITION UNSUCCESS");
+    }
   }
-  return;
+  return true;
 };

@@ -77,12 +77,12 @@ class LogsWatcher {
           return response.data.result;
         default:
           // ERROR FROM INFURA
-          console.error(response.data);
+          console.error("[getLogs]", response.data);
           return [];
       }
     } catch (error) {
       if (error?.response?.status === 429) {
-        console.log("Limit reached switch the token ");
+        console.log("API : Limit reached switch the token ");
         if (this.node === 0) this.node = 1;
         else this.node = 0;
         return await this.getLogs(filterOptions);
@@ -99,16 +99,6 @@ class LogsWatcher {
 
     let listLogs = [];
     if (fromBlock > -1) {
-      console.log(
-        "$$$$$$$$$$$$$$$$$ FROM REQUEST ---> ",
-        fromBlock,
-        " --- ",
-        toBlock,
-        " Sync",
-        toBlock - fromBlock,
-        " ACTUALBLOCK: ",
-        actualBlock
-      );
       listLogs = await this.getLogs({
         fromBlock: `0x${fromBlock.toString(16)}`,
         toBlock: `0x${toBlock.toString(16)}`,

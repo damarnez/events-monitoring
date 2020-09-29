@@ -22,7 +22,6 @@ class DynamoDBClient {
       TableName: table,
       Item: data,
     };
-    console.log("ADD PARAMS: ", params);
     return await this.connection.put(params).promise();
   }
 

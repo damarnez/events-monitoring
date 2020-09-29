@@ -13,15 +13,11 @@ const filterData = new FilterStreams(config);
 const redis = new RedisClient(URL);
 
 export const update = async (stream: any, context: any) => {
-  console.log("CONNECT TO REDIS : ", URL);
-
   try {
     const data = filterData.parse(stream);
-    console.log(JSON.stringify(data, null, 2));
 
     for (let i = 0; i < data.length; i++) {
       const item = data[i];
-      console.log("DATA: ", item.dynamodb, item.dynamodb.NewImage);
       if (
         item.eventName === EventNames.MODIFY &&
         item.Table === Tables.Watcher &&

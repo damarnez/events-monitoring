@@ -10,12 +10,11 @@ const config: EventConfig = {
 const filterData = new FilterStreams(config);
 
 export const send = async (stream: any) => {
-  console.log("NEW EVENTS = ", stream);
   try {
     const data = filterData.parse(stream);
     for (let i = 0; i < data.length; i++) {
       const event = data[i];
-      console.log("DATA: ", event.dynamodb, event.dynamodb.NewImage);
+
       if (
         event.eventName === EventNames.INSERT &&
         event.Table === Tables.Watcher

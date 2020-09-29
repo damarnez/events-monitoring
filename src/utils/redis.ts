@@ -1,6 +1,6 @@
 import Redis from "ioredis";
 const TAG = "[REDIS]";
-
+const DEFAULT_PORT = "6379";
 // Timer to waiting the connection ready
 const Timer: any = () =>
   new Promise((resolve, reject) => {
@@ -13,8 +13,7 @@ const Timer: any = () =>
 class RedisClient {
   private connection: any;
   constructor(URL: string) {
-    console.log("URL: ", URL);
-    this.connection = new Redis("6379", URL, {
+    this.connection = new Redis(DEFAULT_PORT, URL, {
       connectTimeout: 28000,
       maxRetriesPerRequest: 4,
       retryStrategy: (times) => Math.min(times * 30, 1000),
@@ -29,13 +28,11 @@ class RedisClient {
     });
   }
   private async checkConnection() {
-    console.log("########## STATUS:", this.connection.status);
     if (this.connection.status === "connecting") {
       // Wait until the redis are connected
       await Timer();
       return await this.checkConnection();
     }
-    console.log("########## RESULT STATUS:", this.connection.status);
     return true;
   }
   public async incr(key: string) {

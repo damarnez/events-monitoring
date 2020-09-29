@@ -53,15 +53,13 @@ export const sendEmail = (type: Templates, data: any) => {
       },
       Source: "noreply@refractive.xyz",
     };
-    console.log("EMAIL TIPO ", params, params.Message.Body.Html.Data);
+
     ses.sendEmail(params, function (err, data) {
       if (err) {
-        console.log(err, err.stack);
-        reject(err);
+        console.error(err, err.stack);
+        return reject(err);
       }
-      // an error occurred
-      console.log("RESP : ", data); // successful response
-      resolve(data);
+      return resolve(data);
     });
   });
 };

@@ -7,37 +7,14 @@ const URL = process.env.URL_REDIS || "";
 const redis: any = new RedisClient(URL);
 
 export const filter = async (events: Block[]) => {
-  console.log("FILTER EVENTS", events.length);
   // watchers [address,signature,id,condition, email]
   const watchers: string[][] = await redis.getIndexed("watchers");
-  console.log("[FILTEREVENTS]", " n watchers :", watchers.length);
+
   const maches: Match[] = [];
   // Search blocks
   for (const log of events) {
-    console.log("BLOCKNUMBER: ", parseInt(log.blockNumber));
-    console.log("TOPIC: ", log.topics[0]);
-    console.log("ADDRESS: ", log.address);
     // Check all the watchers
     for (const watcher of watchers) {
-      console.log(
-        ">>> CHECK  ADDRESS: ",
-        watcher[0],
-        " === ",
-        log.address.toLowerCase()
-      );
-      console.log(
-        "CHECK SIGNATURE: ",
-        watcher[1],
-        " === ",
-        log.topics[0].toLowerCase()
-      );
-      console.log(
-        " CHECK REMOVED ",
-        !log.removed,
-        " --------------> ",
-        log.removed
-      );
-
       if (
         !log.removed &&
         watcher[0].toLowerCase() === log.address.toLowerCase() &&
