@@ -1,7 +1,6 @@
 import axios from "axios";
 import { Block } from "../utils/types";
 
-const POLLING_TIME = 5000;
 class LogsWatcher {
   private URLS: string[];
   private node: number = 0;
