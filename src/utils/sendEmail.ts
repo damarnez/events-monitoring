@@ -26,7 +26,7 @@ const bodyText = {
 const subectText = {
   [Templates.REGISTER]:
     "Validate your email to watch the event {{event.M.name.S}}",
-  [Templates.VALIDATED]: "Wellcome",
+  [Templates.VALIDATED]: "Welcome",
   [Templates.UNSUBSCRIBE]:
     "Successfully unsubscribed from event {{event.M.name.S}}",
   [Templates.CONDITION]: "New condition triggered",
