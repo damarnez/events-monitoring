@@ -1,63 +1,58 @@
-<!--
-title: 'AWS Simple HTTP Endpoint example in NodeJS with Typescript'
-description: 'This template demonstrates how to make a simple REST API with Node.js and Typescript running on AWS Lambda and API Gateway using the Serverless Framework v1.'
-layout: Doc
-framework: v1
-platform: AWS
-language: nodeJS
-authorLink: 'https://github.com/serverless'
-authorName: 'Serverless, inc.'
-authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
--->
+# Event Monitoring
 
-# Serverless Framework Node with Typescript REST API on AWS
+Frontend : https://gitlab.com/damarnez/events-monitoring-front
 
-This template demonstrates how to make a simple REST API with Node.js and Typescript running on AWS Lambda and API Gateway using the Serverless Framework v1.
+## Local environment
 
-This template does not include any kind of persistence (database). For a more advanced example check out the [aws-node-rest-api-typescript example](https://github.com/serverless/examples/tree/master/aws-node-rest-api-typescript) which has must RESTful resources and persistence using MongoDB.
-
-## Setup
-
-Run this command to initialize a new project in a new working directory.
-
-`sls init aws-node-rest-api-typescript`
-
-## Usage
-
-**Deploy**
-
-This example is made to work with the Serverless Framework dashboard which includes advanced features like CI/CD, monitoring, metrics, etc.
+### Create .env.local file
 
 ```
-$ serverless login
-$ serverless deploy
-```
-
-To deploy without the dashboard you will need to remove `org` and `app` fields from the `serverless.yml`, and you won’t have to run `sls login` before deploying.
-
-**Invoke the function locally.**
-
-```
-serverless invoke local --function hello
-```
-
-**Invoke the function**
-
-```
-curl https://xxxxxxxxx.execute-api.us-east-1.amazonaws.com/dev/
-```
-
-**Env file example**
+URL_REDIS=172.28.1.4
+URL_DYNAMODB=http://172.28.1.5:8000
+URL_INFURA_01= https://network.infura.io/v3/INFURAKEY
+URL_INFURA_02= https://network.infura.io/v3/INFURAKEY
 
 ```
 
-# AWS:
-# AWS_ACCESS_KEY_ID=<your access key>
-# AWS_SECRET_ACCESS_KEY=<your secret access key>
+### Start docker compose
+
+With docker-compose we start the databases (Redis and DynamoDB) in local.
+
+```
+  docker-compose up
+```
+
+### Create tables in dynamodb
+
+```
+  npm run populate:dynamodb
+```
+
+### Start the lambdas
+
+```
+  npm run local
+```
+
+## Deploy production
+
+### Pre deploy
+
+Create a VPC where you have access to the Internet, and have access to Redis and Dynamodb. Also, you need to have the SES approved to send emails to other domains, you don't need to have access from inside of the VPC because the lambda SendEmailByTopic is outside of the VPC.
+
+### Create .env file
+
+```
+URL_REDIS= URLREDIS
+URL_DYNAMODB=http://172.28.1.5:8000
+URL_INFURA_01= https://network.infura.io/v3/INFURAKEY
+URL_INFURA_02= https://network.infura.io/v3/INFURAKEY
 
 ```
 
-// https://www.serverless.com/dynamodb
-// https://github.com/dherault/serverless-offline
+### Deploy
 
-// https://gist.github.com/codecitizen/47073231d781979baec47148e40ab38b
+```
+npm run deploy
+
+```

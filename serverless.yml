@@ -104,7 +104,10 @@ functions:
         - subnet-d44b9898
         - subnet-e273e288
     events:
-      - stream: arn:aws:dynamodb:eu-central-1:351020644073:table/Watcher/stream/2020-09-27T20:31:21.802
+      - stream:
+          type: dynamodb
+          arn:
+            Fn::GetAtt: [WatchersDynamoDbTable, StreamArn]
   unsubscribeemailbytoken:
     handler: src/UnsubscribeEmailByToken/handler.unsubscribe
     events:
@@ -139,9 +142,14 @@ functions:
   sendemailbytopic:
     handler: src/SendEmailByTopic/handler.send
     events:
-      - stream: arn:aws:dynamodb:eu-central-1:351020644073:table/Watcher/stream/2020-09-27T20:31:21.802
-      - stream: arn:aws:dynamodb:eu-central-1:351020644073:table/Historic/stream/2020-09-27T20:31:21.737
-
+      - stream:
+          type: dynamodb
+          arn:
+            Fn::GetAtt: [WatchersDynamoDbTable, StreamArn]
+      - stream:
+          type: dynamodb
+          arn:
+            Fn::GetAtt: [HistoricDynamoDbTable, StreamArn]
 plugins:
   - serverless-plugin-typescript
   - serverless-offline-scheduler

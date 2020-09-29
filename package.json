@@ -1,11 +1,11 @@
 {
-  "name": "aws-node-rest-api-typescript",
-  "description": "",
+  "name": "event-monitoring",
+  "description": "EventMonitoring",
   "version": "0.1.0",
   "scripts": {
     "deploy": "env-cmd .env serverless deploy",
     "remove": "env-cmd .env serverless remove --force",
-    "local": "env-cmd --no-override .env serverless offline -t --allowCache --docker-network defaults",
+    "local": "env-cmd --no-override .env.local serverless offline -t --allowCache --docker-network defaults",
     "populate:redis": "env-cmd --no-override .env node ./.mocks/populate_redis.js",
     "populate:dynamodb": "env-cmd --no-override .env node ./.mocks/populate_dynamodb.js",
     "checkconditions": "env-cmd --no-override .env serverless invoke local --function checkconditions --path ./src/CheckConditions/mock.json",
